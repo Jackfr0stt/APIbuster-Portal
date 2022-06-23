@@ -93,9 +93,9 @@ export default {
     },
     async newAPI(id) {
       const api = {
-        userId: id,
-        apiName: document.getElementById("apiName").value,
-        apiType: document.getElementById("apiType").value,
+        userid: id,
+        apiname: document.getElementById("apiName").value,
+        apitype: document.getElementById("apiType").value,
         domain: document.getElementById("domain").value
       }
 

@@ -20,7 +20,7 @@ import { wrapper } from '../utils/wrapper';
 const apiService = new ApiService();
 
 export default {
-  name: "Test",
+  name: "TestGroup",
   props: {
     test: Object
   },

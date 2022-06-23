@@ -134,7 +134,7 @@ export default {
 
       let filter = {
         where: {
-          apiId: this.api.id
+          apiid: this.api.id
         }
       }
 
@@ -145,9 +145,9 @@ export default {
     },
     async newEndpoint() {
       const endpoint = {
-        apiId: this.api.id,
+        apiid: this.api.id,
         body: document.getElementById("body").value,
-        endpointType: document.getElementById("endpointType").value,
+        endpointtype: document.getElementById("endpointType").value,
         header: document.getElementById("header").value,
         method: document.getElementById("method").value,
         route: document.getElementById("route").value

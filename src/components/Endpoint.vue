@@ -114,7 +114,7 @@
         <div class="row my-3" v-if="tests.length > 0 && showModal == true">
           <div class="container my-3">
             <div v-for="test of tests">
-              <Test :test="test" :key="test.id" />
+              <TestGroup :test="test" :key="test.id" />
             </div>
           </div>
         </div>
@@ -133,8 +133,8 @@
 <script>
 import ApiService from '../services/ApiService';
 import { wrapper } from '../utils/wrapper';
-import TestVue from './Test.vue';
-import Test from './Test.vue';
+import TestGroupVue from './TestGroup.vue';
+import TestGroup from './TestGroup.vue';
 
 const apiService = new ApiService();
 
@@ -205,8 +205,8 @@ export default {
       // test
       const test = {
         endpointId: this.endpoint.id,
-        testName: document.getElementById("testName").value,
-        testType: document.getElementById("testType").value,
+        testname: document.getElementById("testName").value,
+        testtype: document.getElementById("testType").value,
       }
 
       const res = await wrapper(apiService.newTest(test));
@@ -215,37 +215,37 @@ export default {
       if (test.testType == "Performance") {
         // non-functional
         const nonFunc = {
-          testId: res.data.id
+          testid: res.data.id
         }
         await wrapper(apiService.newFuncTest(nonFunc));
       } else {
         // functional
         const func = {
-          testId: res.data.id
+          testid: res.data.id
         }
         const newTestRes = await wrapper(apiService.newFuncTest(func));
 
-        if (test.testType == "Acceptance") {
+        if (test.testtype == "Acceptance") {
           const acceptance = {
-            functionalId: newTestRes.data.id,
-            acceptanceBody: document.getElementById("testBody").value,
-            acceptanceExpect: document.getElementById("testExpect").value,
+            functionalid: newTestRes.data.id,
+            acceptancebody: document.getElementById("testBody").value,
+            acceptanceexpect: document.getElementById("testExpect").value,
           }
 
           await wrapper(apiService.newAcceptanceTest(acceptance));
         } else if (test.testType == "Integration") {
           const integration = {
-            functionalId: newTestRes.data.id,
-            integrationBody: document.getElementById("testBody").value,
-            integrationExpect: document.getElementById("testExpect").value,
+            functionalid: newTestRes.data.id,
+            integrationbody: document.getElementById("testBody").value,
+            integrationexpect: document.getElementById("testExpect").value,
           }
 
           await wrapper(apiService.newIntegrationTest(integration));
         } else if (test.testType == "Unit") {
           const unit = {
-            functionalId: newTestRes.data.id,
-            unitBody: document.getElementById("testBody").value,
-            unitExpect: document.getElementById("testExpect").value,
+            functionalid: newTestRes.data.id,
+            unitbody: document.getElementById("testBody").value,
+            unitexpect: document.getElementById("testExpect").value,
           }
 
           await wrapper(apiService.newUnitTest(unit));
@@ -266,8 +266,8 @@ export default {
       this.showNewTestModal = !this.showNewTestModal;
     }
   },
-  components: TestVue,
-  components: { Test }
+  components: TestGroupVue,
+  components: { TestGroup }
 }
 </script>
 
