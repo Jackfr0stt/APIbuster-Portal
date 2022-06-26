@@ -7,7 +7,7 @@
             <h4 class="col endpoint-property">{{ endpoint.method }}</h4>
           </div>
           <div class="row endpoint-property">
-            <h6 class="col endpoint-property">{{ `${endpoint.endpointType} ${endpoint.route}` }}</h6>
+            <h6 class="col endpoint-property">{{ `${endpoint.endpointtype} ${endpoint.route}` }}</h6>
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="container-fluid card">
-        <div class="row" v-if="showModal == true" id="tests">
+        <div class="row" v-if="showModal == true" id="testgroups">
           <div class="col">
             <h2>{{ endpoint.method }} Tests</h2>
           </div>
@@ -111,17 +111,17 @@
           </div>
         </div>
 
-        <div class="row my-3" v-if="tests.length > 0 && showModal == true">
+        <div class="row my-3" v-if="testgroups.length > 0 && showModal == true">
           <div class="container my-3">
-            <div v-for="test of tests">
-              <TestGroup :test="test" :key="test.id" />
+            <div v-for="testgroup of testgroups">
+              <TestGroup :testgroup="testgroup" :key="testgroup.id" />
             </div>
           </div>
         </div>
-        <div class="row my-3" v-if="tests.length == 0 && showModal == true">
+        <div class="row my-3" v-if="testgroups.length == 0 && showModal == true">
           <div class="container-fluid">
             <div class="col">
-              <h2> No tests yet created. </h2>
+              <h2> No test groups yet created. </h2>
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default {
   },
   data() {
     return {
-      tests: [],
+      testgroups: [],
       showModal: false,
       showNewTestModal: false,
       credentials: ""
@@ -155,104 +155,108 @@ export default {
     async showTests() {
       this.modal();
 
+      // let filter = {
+      //   where: {
+      //     endpointId: this.endpoint.id
+      //   },
+      //   include: [
+      //     {
+      //       relation: 'functionals',
+      //       scope: {
+      //         include: [
+      //           {
+      //             relation: 'acceptances',
+      //             scope: {}
+      //           },
+      //           {
+      //             relation: 'integrations',
+      //             scope: {}
+      //           },
+      //           {
+      //             relation: 'units',
+      //             scope: {}
+      //           }
+      //         ]
+      //       }
+      //     },
+      //     {
+      //       relation: 'nonFunctionals',
+      //       scope: {
+      //         include: [
+      //           {
+      //             relation: 'performances',
+      //             scope: {}
+      //           }
+      //         ]
+      //       }
+      //     }
+      //   ]
+      // }
+
       let filter = {
         where: {
-          endpointId: this.endpoint.id
-        },
-        include: [
-          {
-            relation: 'functionals',
-            scope: {
-              include: [
-                {
-                  relation: 'acceptances',
-                  scope: {}
-                },
-                {
-                  relation: 'integrations',
-                  scope: {}
-                },
-                {
-                  relation: 'units',
-                  scope: {}
-                }
-              ]
-            }
-          },
-          {
-            relation: 'nonFunctionals',
-            scope: {
-              include: [
-                {
-                  relation: 'performances',
-                  scope: {}
-                }
-              ]
-            }
-          }
-        ]
-      }
+          enpointid: this.endpoint.id
+        }
+      };
 
-      alert(JSON.stringify(filter));
-      if (this.tests.length == 0) {
-        // const res = await wrapper(apiService.getTests(filter));
-        const res = await wrapper(apiService.getTests(JSON.stringify(filter)));
-        console.log(res.data);
-        this.tests = res.data;
+      // alert(JSON.stringify(filter));
+      if (this.testgroups.length == 0) {
+        const res = await wrapper(apiService.getTestGroups(JSON.stringify(filter)));
+        this.testgroups = res.data;
       }
     },
     async newTest() {
       // test
       const test = {
         endpointId: this.endpoint.id,
-        testname: document.getElementById("testName").value,
-        testtype: document.getElementById("testType").value,
+        testgroupname: document.getElementById("testName").value,
+        testgrouptype: document.getElementById("testType").value,
       }
 
-      const res = await wrapper(apiService.newTest(test));
+      const res = await wrapper(apiService.newTestGroup(test));
 
-      // functional / non-functional test
-      if (test.testType == "Performance") {
-        // non-functional
-        const nonFunc = {
-          testid: res.data.id
-        }
-        await wrapper(apiService.newFuncTest(nonFunc));
-      } else {
-        // functional
-        const func = {
-          testid: res.data.id
-        }
-        const newTestRes = await wrapper(apiService.newFuncTest(func));
+      // // functional / non-functional test
+      // if (test.testType == "Performance") {
+      //   // non-functional
+      //   const nonFunc = {
+      //     testid: res.data.id
+      //   }
+      //   await wrapper(apiService.newFuncTest(nonFunc));
+      // } else {
+      //   // functional
+      //   const func = {
+      //     testid: res.data.id
+      //   }
+      //   const newTestRes = await wrapper(apiService.newFuncTest(func));
 
-        if (test.testtype == "Acceptance") {
-          const acceptance = {
-            functionalid: newTestRes.data.id,
-            acceptancebody: document.getElementById("testBody").value,
-            acceptanceexpect: document.getElementById("testExpect").value,
-          }
+      //   if (test.testtype == "Acceptance") {
+      //     const acceptance = {
+      //       functionalid: newTestRes.data.id,
+      //       acceptancebody: document.getElementById("testBody").value,
+      //       acceptanceexpect: document.getElementById("testExpect").value,
+      //     }
 
-          await wrapper(apiService.newAcceptanceTest(acceptance));
-        } else if (test.testType == "Integration") {
-          const integration = {
-            functionalid: newTestRes.data.id,
-            integrationbody: document.getElementById("testBody").value,
-            integrationexpect: document.getElementById("testExpect").value,
-          }
+      //     await wrapper(apiService.newAcceptanceTest(acceptance));
+      //   } else if (test.testType == "Integration") {
+      //     const integration = {
+      //       functionalid: newTestRes.data.id,
+      //       integrationbody: document.getElementById("testBody").value,
+      //       integrationexpect: document.getElementById("testExpect").value,
+      //     }
 
-          await wrapper(apiService.newIntegrationTest(integration));
-        } else if (test.testType == "Unit") {
-          const unit = {
-            functionalid: newTestRes.data.id,
-            unitbody: document.getElementById("testBody").value,
-            unitexpect: document.getElementById("testExpect").value,
-          }
+      //     await wrapper(apiService.newIntegrationTest(integration));
+      //   } else if (test.testType == "Unit") {
+      //     const unit = {
+      //       functionalid: newTestRes.data.id,
+      //       unitbody: document.getElementById("testBody").value,
+      //       unitexpect: document.getElementById("testExpect").value,
+      //     }
 
-          await wrapper(apiService.newUnitTest(unit));
-        }
-      }
+      //     await wrapper(apiService.newUnitTest(unit));
+      //   }
+      // }
 
-      this.tests.push(res.data);
+      this.testgroups.push(res.data);
       await this.newTestModal();
     },
     async delEndpoint() {
@@ -282,7 +286,7 @@ export default {
   text-align: center;
 }
 
-#tests {
+#testgroups {
   margin-top: 40px;
 }
 

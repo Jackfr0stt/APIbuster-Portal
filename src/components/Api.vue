@@ -3,10 +3,10 @@
     <div class="row my-3">
       <div class="col-9">
         <div class="row api-property">
-          <h4 class="col api-property">API {{ api.apiName }}</h4>
+          <h4 class="col api-property">API {{ api.apiname }}</h4>
         </div>
         <div class="row api-property">
-          <div class="col-3 api-property">Type: {{ api.apiType }}</div>
+          <div class="col-3 api-property">Type: {{ api.apitype }}</div>
           <div class="col-3 api-property">Domain: {{ api.domain }}</div>
         </div>
       </div>

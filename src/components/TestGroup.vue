@@ -1,10 +1,10 @@
 <template>
-  <div class="container-fluid card" id="test-card">
+  <div class="container-fluid card" id="testgroup-card">
     <div class="row my-3">
       <div class="col">
         <div class="row">
-          <div class="col test-property">Test Name: {{ test.testName }}</div>
-          <div class="col test-property">Test Type: {{ test.testType }}</div>
+          <div class="col testgroup-property">Group Name: {{ testgroup.testgroupname }}</div>
+          <!-- <div class="col testgroup-property">Test Group Type: {{ testgroup.testgrouptype }}</div> -->
         </div>
       </div>
       <div class="col-2"><img src="./icons/minus.png" alt="" width="30" height="24" class="img-fluid button"
@@ -22,18 +22,18 @@ const apiService = new ApiService();
 export default {
   name: "TestGroup",
   props: {
-    test: Object
+    testgroup: Object
   },
   data() {
     return {
-      functional: [],
-      nonFunctional: [],
+      // functional: [],
+      // nonFunctional: [],
       showModal: false
     }
   },
   methods: {
     async delTest() {
-      await wrapper(apiService.delTest(this.test.id));
+      await wrapper(apiService.delTest(this.testgroup.id));
       location.reload();
     },
   }
@@ -57,7 +57,7 @@ export default {
   box-shadow: none;
 }
 
-.test-property {
+.testgroup-property {
   text-align: left;
 }
 

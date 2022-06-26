@@ -7,7 +7,6 @@ export default class ApiService {
     let route: string = "";
 
     if (filter) {
-      console.log(filter);
       route = `${API_URL}/apis?where=${encodeURI(JSON.stringify(filter))}`;
     } else {
       route = `${API_URL}/apis`;
@@ -71,7 +70,6 @@ export default class ApiService {
     let route: string = "";
 
     if (filter) {
-      console.log(filter);
       route = `${API_URL}/endpoints?where=${encodeURI(JSON.stringify(filter))}`;
     } else {
       route = `${API_URL}/endpoints`;
@@ -131,12 +129,45 @@ export default class ApiService {
     }
   }
 
+  async getTestGroups(filter?: any) {
+    let route: string = "";
+
+    if (filter) {
+      route = `${API_URL}/testgroups?filter=${encodeURI(filter)}`;
+    } else {
+      route = `${API_URL}/testgroups`;
+    }
+    const response = await wrapper(
+      axios.get(route)
+    );
+
+    if (response.error) {
+      throw response.error;
+    }
+    if (response.data) {
+      return response.data.data;
+    }
+  }
+
+  async newTestGroup(body: any) {
+    const route = `${API_URL}/testgroups`;
+
+    const response = await wrapper(
+      axios.post(route, body)
+    );
+
+    if (response.error) {
+      throw response.error;
+    }
+    if (response.data) {
+      return response.data.data;
+    }
+  }
+
   async getTests(filter?: any) {
     let route: string = "";
 
     if (filter) {
-      console.log(filter);
-      // route = `${API_URL}/tests?where=${encodeURI(JSON.stringify(filter))}`;
       route = `${API_URL}/tests?filter=${encodeURI(filter)}`;
     } else {
       route = `${API_URL}/tests`;
